@@ -26,11 +26,13 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-var initialIntent =new  builder.IntentDialog();
+var initialIntent = new builder.IntentDialog();
 bot.dialog("/",initialIntent);
-
 initialIntent.matches(/@ava/i,function(session){
     session.beginDialog("/start");
+});
+initialIntent.onDefault(function(session){
+    session.endConversation();
 });
 
 bot.dialog('/start', [function (session) {
@@ -71,9 +73,8 @@ bot.dialog("/newssearch",[
             }
         });
        
-      session.endDialog();  
+       session.endConversation(); 
     }
-
 ]);
 
 bot.dialog("/newscategories",[
