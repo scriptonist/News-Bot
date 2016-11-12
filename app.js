@@ -62,6 +62,7 @@ function(session,results){
         }
         else if(results.response.entity == "Health"){
             //Fetch Health News
+            session.beginDialog("/HealthNews");
                 
         }
         
@@ -338,6 +339,7 @@ bot.dialog('/Bussiness',[
         session.endDialog();
     }
 ]);
+
 bot.dialog('/EntertaintmentNews',[
     function(session){
     builder.Prompts.choice(session,"Sections","General|Music|Movies|Art");
@@ -417,6 +419,110 @@ bot.dialog('/EntertaintmentNews',[
             if(results.response.entity == "Art")
             {
                 api.getArticles("en","","","entertainment_art-and-culture",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+        }
+        session.endDialog();
+    }
+]);
+
+bot.dialog('/HealthNews',[
+    function(session){
+    builder.Prompts.choice(session,"Sections","MentalHealth|Ayurveda|Nutrition|Fitness");
+    
+    },
+    function(session,results){
+        if(results.response){
+            if(results.response.entity == "MentalHealth")
+            {
+                api.getArticles("en","","","wellness_mental-health",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Ayurveda")
+            {
+                api.getArticles("en","","","wellness_ayurveda",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Nutrition")
+            {
+                api.getArticles("en","","","wellness_diet-\u0026-nutrition",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Fitness")
+            {
+                api.getArticles("en","","","wellness_fitness",function(data){
                     api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
                          var msg = new builder.Message(session)
                     .textFormat(builder.TextFormat.xml)
