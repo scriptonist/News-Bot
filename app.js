@@ -27,15 +27,46 @@ server.post('/api/messages', connector.listen());
 //=========================================================
 
 bot.dialog('/', [function (session) {
-    builder.Prompts.choice(session, "What Do u Like ??", "Menu|News Search");
+    builder.Prompts.choice(session, "What Do u Like ??", "Menu|Search");
 },
 function(session,results){
     if(results.response){
         if(results.response.entity == "Menu")
             session.beginDialog('/newscategories');
+        if(results.response.entity == "Search")
+            session.beginDialog('/newssearch');
     }
 
 }]);
+
+bot.dialog("/newssearch",[
+    function(session){
+        builder.Prompts.text(session, "What should i search for ?");
+    },
+    function(session,results){
+        session.userData.query = results.response;
+        api.search("en","all",session.userData.query,"","","",function(data2){
+            for(var i=0;i<3;i++){
+                     var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['articles'][i]['title'])
+                            .subtitle(data2['articles'][i]['lastmodified'])
+                            .text(data2['articles'][i]["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['articles'][i]['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articles'][i]['articleURL']))
+                    ]);
+
+                 session.send(msg);
+            }
+        });
+       
+        
+    }
+]);
 
 bot.dialog("/newscategories",[
     function(session){
@@ -72,6 +103,7 @@ function(session,results){
     
 }]
 );
+
 
 bot.dialog('/GeneralNews',[
     function(session){
