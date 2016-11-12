@@ -72,7 +72,7 @@ bot.dialog("/newssearch",[
 
 bot.dialog("/newscategories",[
     function(session){
-    builder.Prompts.choice(session,"Here are some categories that I think u like","General|Sports|Bussiness|Entertaintment|Health");
+    builder.Prompts.choice(session,"What would you like to read about ?","General|Sports|Bussiness|Entertaintment|Health");
     },
 function(session,results){
    if(results.response){
