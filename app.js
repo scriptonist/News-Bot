@@ -28,7 +28,7 @@ server.post('/api/messages', connector.listen());
 
 
 bot.dialog('/', [function (session) {
-    builder.Prompts.choice(session, "Hi I'm the Manorama Bot!.These are the things i can do!", "Menu|Search");
+    builder.Prompts.choice(session, "Hi I'm the Manorama Bot!", "Menu|Search");
 },
 function(session,results){
     if(results.response){
