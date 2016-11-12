@@ -48,7 +48,7 @@ function(session,results){
             session.beginDialog("/GeneralNews");
         }
         else if(results.response.entity == "Sports"){
-            //Fetch Sports
+            session.beginDialog("/SportsNews");
 
         }
         else if(results.response.entity == "Bussiness"){
@@ -81,6 +81,52 @@ bot.dialog('/GeneralNews',[
             if(results.response.entity == "Kerala")
             {
                 api.getArticles("en","","","news_kerala",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "India")
+            {
+                api.getArticles("en","","","news_nation",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "International")
+            {
+                api.getArticles("en","","","news_world",function(data){
                     api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
                          var msg = new builder.Message(session)
                     .textFormat(builder.TextFormat.xml)
