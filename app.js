@@ -57,6 +57,7 @@ function(session,results){
         }
         else if(results.response.entity == "Entertaintment"){
             //Fetch Entertaintment News
+            session.beginDialog("/EntertaintmentNews");
                 
         }
         else if(results.response.entity == "Health"){
@@ -313,6 +314,109 @@ bot.dialog('/Bussiness',[
             if(results.response.entity == "Companies")
             {
                 api.getArticles("en","","","business_companies",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+        }
+        session.endDialog();
+    }
+]);
+bot.dialog('/EntertaintmentNews',[
+    function(session){
+    builder.Prompts.choice(session,"Sections","General|Music|Movies|Art");
+    
+    },
+    function(session,results){
+        if(results.response){
+            if(results.response.entity == "General")
+            {
+                api.getArticles("en","","","entertainment_entertainment-news",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Music")
+            {
+                api.getArticles("en","","","entertainment_music",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Movies")
+            {
+                api.getArticles("en","","","entertainment_movie-review",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Art")
+            {
+                api.getArticles("en","","","entertainment_art-and-culture",function(data){
                     api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
                          var msg = new builder.Message(session)
                     .textFormat(builder.TextFormat.xml)
