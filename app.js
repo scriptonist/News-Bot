@@ -151,3 +151,84 @@ bot.dialog('/GeneralNews',[
         session.endDialog();
     }
 ]);
+
+bot.dialog('/SportsNews',[
+    function(session){
+    builder.Prompts.choice(session,"Sections","Cricket|Football|Others");
+    
+    },
+    function(session,results){
+        if(results.response){
+            if(results.response.entity == "Cricket")
+            {
+                api.getArticles("en","","","sports_cricket",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Football")
+            {
+                api.getArticles("en","","","sports_football",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+            if(results.response.entity == "Others")
+            {
+                api.getArticles("en","","","sports_other-sports",function(data){
+                    api.getArticleDetails("en",data["articleSummary"][0]['articleID'],function(data2){
+                         var msg = new builder.Message(session)
+                    .textFormat(builder.TextFormat.xml)
+                    .attachments([
+                        new builder.HeroCard(session)
+                            .title(data2['title'])
+                            .subtitle(data2['authorname'])
+                            .text(data2["imageDescription"])
+                            .images([
+                                builder.CardImage.create(session, data2['thumbnail'])
+                            ])
+                            .tap(builder.CardAction.openUrl(session, data2['articleURL']))
+                    ]);
+
+                         session.send(msg);
+                    });
+
+                   
+                });
+            }
+        }
+        session.endDialog();
+    }
+]);
