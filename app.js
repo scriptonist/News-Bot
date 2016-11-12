@@ -26,7 +26,14 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-bot.dialog('/', [function (session) {
+var initialIntent =new  builder.IntentDialog();
+bot.dialog("/",initialIntent);
+
+initialIntent.matches(/@ava/i,function(session){
+    session.beginDialog("/start");
+});
+
+bot.dialog('/start', [function (session) {
     builder.Prompts.choice(session, "What Do u Like ??", "Menu|Search");
 },
 function(session,results){
@@ -64,8 +71,9 @@ bot.dialog("/newssearch",[
             }
         });
        
-        
+      session.endDialog();  
     }
+
 ]);
 
 bot.dialog("/newscategories",[
