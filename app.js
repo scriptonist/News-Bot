@@ -28,7 +28,7 @@ server.post('/api/messages', connector.listen());
 
 var initialIntent = new builder.IntentDialog();
 bot.dialog("/",initialIntent);
-initialIntent.matches(/@ava/i,function(session){
+initialIntent.matches(/^@ava$/i,function(session){
     session.beginDialog("/start");
 });
 initialIntent.onDefault(function(session){
