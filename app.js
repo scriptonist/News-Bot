@@ -26,17 +26,9 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-var initialIntent = new builder.IntentDialog();
-bot.dialog("/",initialIntent);
-initialIntent.matches(/^@ava$/i,function(session){
-    session.beginDialog("/start");
-});
-initialIntent.onDefault(function(session){
-    session.endConversation();
-});
 
-bot.dialog('/start', [function (session) {
-    builder.Prompts.choice(session, "What Do u Like ??", "Menu|Search");
+bot.dialog('/', [function (session) {
+    builder.Prompts.choice(session, "Hi I'm the Manorama Bot!.These are the things i can do!", "Menu|Search");
 },
 function(session,results){
     if(results.response){
@@ -77,9 +69,10 @@ bot.dialog("/newssearch",[
     }
 ]);
 
+
 bot.dialog("/newscategories",[
     function(session){
-    builder.Prompts.choice(session,"Sections","General|Sports|Bussiness|Entertaintment|Health");
+    builder.Prompts.choice(session,"Here are some categories that I think u like","General|Sports|Bussiness|Entertaintment|Health");
     },
 function(session,results){
    if(results.response){
